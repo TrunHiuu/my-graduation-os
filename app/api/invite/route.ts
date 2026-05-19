@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch user data
-    const { data: user, error: userError } = await supabase
+    const { data: user } = await supabase
       .from("users")
       .select("*")
       .eq("id", invitation.user_id)
@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
       invitation,
       memories: memories || [],
     });
-  } catch (error) {
+  } catch {
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }

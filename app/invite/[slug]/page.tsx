@@ -1,36 +1,58 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element */
+
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import PixelWindow from "@/components/PixelWindow";
 import TerminalWindow from "@/components/TerminalWindow";
 import StudentStatsWindow from "@/components/StudentStats";
 import MemoryGallery from "@/components/MemoryGallery";
 import CRTOverlay from "@/components/CRTOverlay";
 import FloatingParticles from "@/components/FloatingParticles";
+import MusicToggleButton from "@/components/MusicToggleButton";
 import PlayerCharacter from "@/components/PlayerCharacter";
 import { User, Invitation, Memory, StudentStats } from "@/types/invite";
 
+const INVITE_ACCESS_KEY = "graduation-invite-access-slug";
+
 export default function InvitePage() {
   const params = useParams();
+  const router = useRouter();
   const slug = params.slug as string;
 
   const [user, setUser] = useState<User | null>(null);
   const [invitation, setInvitation] = useState<Invitation | null>(null);
   const [memories, setMemories] = useState<Memory[]>([]);
   const [loading, setLoading] = useState(true);
+  const [minimumLoadingDone, setMinimumLoadingDone] = useState(false);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      setMinimumLoadingDone(true);
+    }, 3000);
+
+    return () => window.clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
+      const allowedSlug = sessionStorage.getItem(INVITE_ACCESS_KEY);
+
+      if (allowedSlug !== slug) {
+        router.replace("/");
+        return;
+      }
+
       try {
         const response = await fetch(`/api/invite?slug=${slug}`);
-        
+
         if (!response.ok) {
           console.error(`API error: ${response.status} ${response.statusText}`);
           setLoading(false);
           return;
         }
-        
+
         const data = await response.json();
 
         if (data.user && data.invitation) {
@@ -48,12 +70,21 @@ export default function InvitePage() {
     }
 
     fetchData();
-  }, [slug]);
+  }, [router, slug]);
 
-  if (loading) {
+  if (loading || !minimumLoadingDone) {
     return (
-      <div className="w-full h-screen bg-gradient-to-b from-yellow-900 via-orange-400 to-orange-300 flex items-center justify-center">
-        <div className="text-center">
+      <div className="navy-loading-screen w-full h-screen flex items-center justify-center overflow-hidden">
+        <div className="relative z-10 flex w-[min(58vw,300px)] flex-col items-center">
+          <div className="degree-loading-track">
+            <div className="degree-loading-fill" />
+            <img
+              src="/degree-removebg-preview.png"
+              alt=""
+              className="degree-loading-icon"
+              draggable={false}
+            />
+          </div>
           <p style={{ fontFamily: "Press Start 2P" }} className="text-white text-sm">
             Loading...
           </p>
@@ -84,6 +115,8 @@ export default function InvitePage() {
 
   return (
     <div className="relative w-full h-screen bg-gradient-to-b from-yellow-900 via-orange-400 to-orange-300 overflow-hidden">
+      <MusicToggleButton />
+
       {/* Floating Particles */}
       <FloatingParticles />
 
@@ -107,8 +140,8 @@ export default function InvitePage() {
             <p className="text-xs">{invitation.personalized_message}</p>
 
             <div className="border-t-2 border-gray-800 pt-3">
-              <p className="text-xs font-bold">📅 Graduation Year: {invitation.graduation_year}</p>
-              <p className="text-xs font-bold">📍 Event Location: TBA</p>
+              <p className="text-xs font-bold">Graduation Year: {invitation.graduation_year}</p>
+              <p className="text-xs font-bold">Event Location: TBA</p>
             </div>
 
             <button className="w-full bg-blue-500 border-2 border-gray-800 text-white text-xs font-bold py-2 hover:bg-blue-600">

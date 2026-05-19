@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : "Unknown error";
+}
+
 export async function POST() {
   try {
     console.log("Starting setup...");
@@ -75,10 +79,10 @@ export async function POST() {
       message: "Database setup completed successfully",
       users: users.map((u) => ({ id: u.id, phone: u.phone, name: u.name })),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Setup error:", error);
     return NextResponse.json(
-      { error: `Internal server error: ${error.message}` },
+      { error: `Internal server error: ${getErrorMessage(error)}` },
       { status: 500 }
     );
   }

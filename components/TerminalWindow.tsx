@@ -5,15 +5,15 @@ interface TerminalWindowProps {
   commands?: string[];
 }
 
-export default function TerminalWindow({ commands }: TerminalWindowProps) {
-  const defaultCommands = [
-    "loading memories...",
-    "compiling university life...",
-    "fixing deadlines...",
-    "survived.",
-    "graduation complete.",
-  ];
+const defaultCommands = [
+  "loading memories...",
+  "compiling university life...",
+  "fixing deadlines...",
+  "survived.",
+  "graduation complete.",
+];
 
+export default function TerminalWindow({ commands }: TerminalWindowProps) {
   const [displayText, setDisplayText] = useState("");
   const [commandIndex, setCommandIndex] = useState(0);
 

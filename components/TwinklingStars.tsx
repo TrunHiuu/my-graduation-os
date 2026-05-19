@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useSyncExternalStore } from "react";
 
 interface TwinklingStar {
   id: number;
@@ -13,29 +13,51 @@ interface TwinklingStar {
   brightness: number;
 }
 
-export default function TwinklingStars() {
-  const [stars, setStars] = useState<TwinklingStar[]>([]);
+function seededValue(seed: number) {
+  const value = Math.sin(seed * 12.9898) * 43758.5453;
 
-  useEffect(() => {
-    // Generate many twinkling stars across the screen
-    const newStars = Array.from({ length: 120 }).map((_, i) => ({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      duration: 1.5 + Math.random() * 2,
-      delay: Math.random() * 4,
-      size: 1 + Math.random() * 2,
-      brightness: 0.5 + Math.random() * 0.5,
-    }));
-    setStars(newStars);
-  }, []);
+  return value - Math.floor(value);
+}
+
+const stars: TwinklingStar[] = Array.from({ length: 120 }).map((_, i) => ({
+  id: i,
+  x: seededValue(i + 1) * 100,
+  y: seededValue(i + 2) * 100,
+  duration: 1.5 + seededValue(i + 3) * 2,
+  delay: seededValue(i + 4) * 4,
+  size: 1 + seededValue(i + 5) * 2,
+  brightness: 0.5 + seededValue(i + 6) * 0.5,
+}));
+
+function subscribe() {
+  return () => {};
+}
+
+function getClientSnapshot() {
+  return true;
+}
+
+function getServerSnapshot() {
+  return false;
+}
+
+export default function TwinklingStars() {
+  const isHydrated = useSyncExternalStore(
+    subscribe,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
+
+  if (!isHydrated) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
       {stars.map((star) => (
-        <motion.div
+        <div
           key={star.id}
-          className="absolute rounded-full"
+          className="twinkling-star absolute rounded-full"
           style={{
             width: `${star.size}px`,
             height: `${star.size}px`,
@@ -43,17 +65,10 @@ export default function TwinklingStars() {
             left: `${star.x}%`,
             top: `${star.y}%`,
             filter: "drop-shadow(0 0 2px rgba(255, 255, 255, 0.8))",
-          }}
-          animate={{
-            opacity: [0, star.brightness, 0, star.brightness * 0.6, 0],
-            scale: [0.5, 1, 0.8, 1, 0.5],
-          }}
-          transition={{
-            duration: star.duration,
-            delay: star.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+            "--star-brightness": star.brightness,
+            animationDuration: `${star.duration}s`,
+            animationDelay: `${star.delay}s`,
+          } as React.CSSProperties}
         />
       ))}
     </div>

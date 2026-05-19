@@ -1,5 +1,7 @@
-import { motion } from "framer-motion";
-import React, { useEffect, useState } from "react";
+"use client";
+
+import React from "react";
+import { useSyncExternalStore } from "react";
 
 interface Particle {
   id: number;
@@ -10,56 +12,66 @@ interface Particle {
   isTopZone: boolean;
 }
 
-export default function FloatingParticles() {
-  const [particles, setParticles] = useState<Particle[]>([]);
+function seededValue(seed: number) {
+  const value = Math.sin(seed * 12.9898) * 43758.5453;
 
-  useEffect(() => {
-    // Only generate particles on client to avoid hydration mismatch
-    const newParticles = Array.from({ length: 200 }).map((_, i) => {
-      const initialY = Math.random() * 100;
-      const isTopZone = initialY < 33.33; // Top 1/3 is blue zone
-      
-      return {
-        id: i,
-        initialX: Math.random() * 100,
-        initialY: initialY,
-        duration: 4 + Math.random() * 6,
-        delay: Math.random() * 3,
-        isTopZone,
-      };
-    });
-    setParticles(newParticles);
-  }, []);
+  return value - Math.floor(value);
+}
+
+const particles: Particle[] = Array.from({ length: 200 }).map((_, i) => {
+  const initialY = seededValue(i + 2) * 100;
+  const isTopZone = initialY < 33.33;
+
+  return {
+    id: i,
+    initialX: seededValue(i + 1) * 100,
+    initialY,
+    duration: 4 + seededValue(i + 3) * 6,
+    delay: seededValue(i + 4) * 3,
+    isTopZone,
+  };
+});
+
+function subscribe() {
+  return () => {};
+}
+
+function getClientSnapshot() {
+  return true;
+}
+
+function getServerSnapshot() {
+  return false;
+}
+
+export default function FloatingParticles() {
+  const isHydrated = useSyncExternalStore(
+    subscribe,
+    getClientSnapshot,
+    getServerSnapshot,
+  );
+
+  if (!isHydrated) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
       {particles.map((particle) => (
-        <motion.div
+        <div
           key={particle.id}
-          className={`absolute rounded-full opacity-70`}
+          className="floating-particle absolute rounded-full"
           style={{
             width: particle.isTopZone ? "4px" : "3px",
             height: particle.isTopZone ? "4px" : "3px",
             backgroundColor: particle.isTopZone ? "#00ffff" : "#ff99cc",
             boxShadow: particle.isTopZone ? "0 0 8px #00ffff, 0 0 16px #0099ff" : "0 0 6px #ff99cc",
-          }}
-          initial={{
             left: `${particle.initialX}%`,
             top: `${particle.initialY}%`,
-            opacity: 0,
-            scale: 0,
-          }}
-          animate={{
-            top: `${particle.initialY - 40}%`,
-            opacity: [0, 0.8, 0.4, 0],
-            scale: [0, 1, 0.9, 0],
-          }}
-          transition={{
-            duration: particle.duration,
-            delay: particle.delay,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+            "--particle-rise": `-${Math.min(40, particle.initialY + 12)}vh`,
+            animationDuration: `${particle.duration}s`,
+            animationDelay: `${particle.delay}s`,
+          } as React.CSSProperties}
         />
       ))}
     </div>

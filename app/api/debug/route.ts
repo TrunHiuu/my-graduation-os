@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
 
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : "Unknown error";
+}
+
 export async function GET() {
   try {
     // Check users table
@@ -10,17 +14,17 @@ export async function GET() {
 
     // Check invites table (cũ)
     let invitesCount = 0;
-    let invitesError = null;
+    let invitesErrorMessage: string | undefined;
     let invitesData = null;
     try {
       const result = await supabase
         .from("invites")
         .select("*", { count: "exact" });
       invitesData = result.data;
-      invitesError = result.error;
+      invitesErrorMessage = result.error?.message;
       invitesCount = result.count || 0;
-    } catch (e: any) {
-      invitesError = e.message;
+    } catch (error: unknown) {
+      invitesErrorMessage = getErrorMessage(error);
     }
 
     // Check invitations table (mới)
@@ -36,7 +40,7 @@ export async function GET() {
       },
       invites: {
         count: invitesCount || 0,
-        error: invitesError?.message,
+        error: invitesErrorMessage,
         sample: invitesData?.slice(0, 2),
       },
       invitations: {
@@ -45,7 +49,7 @@ export async function GET() {
         sample: invitationsData?.slice(0, 2),
       },
     });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message });
+  } catch (error: unknown) {
+    return NextResponse.json({ error: getErrorMessage(error) });
   }
 }
