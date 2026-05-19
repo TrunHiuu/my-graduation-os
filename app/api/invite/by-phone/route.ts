@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 
 export async function GET(request: NextRequest) {
   const phone = request.nextUrl.searchParams.get("phone");
@@ -12,6 +12,8 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const supabase = getSupabase();
+
     console.log("Searching for phone:", phone);
     
     // Fetch user by phone

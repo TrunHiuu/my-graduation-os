@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 
 function getErrorMessage(error: unknown) {
   return error instanceof Error ? error.message : "Unknown error";
@@ -7,6 +7,8 @@ function getErrorMessage(error: unknown) {
 
 export async function GET() {
   try {
+    const supabase = getSupabase();
+
     // Check users table
     const { data: usersData, error: usersError, count: usersCount } = await supabase
       .from("users")
