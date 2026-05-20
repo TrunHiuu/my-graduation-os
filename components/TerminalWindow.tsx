@@ -11,7 +11,7 @@ const defaultCommands = [
   "Hi there, all my adorable friends",
   "You are invited to attend my graduation game",
   "Complete all missions to gain the reward",
-  "Reward will be exchanged in my graduation ceremony",
+  "Reward will be exchanged in my graduation ceromony",
   "Let's go there to cheer up with me and receive your gift",
   " ",
   "     ---------------------------------------------------------------",
