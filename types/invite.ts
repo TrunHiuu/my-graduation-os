@@ -17,6 +17,15 @@ export interface User {
   attendance_status?: AttendanceStatus | null;
 }
 
+export interface Invitation {
+  id: string;
+  user_id: string;
+  slug: string;
+  personalized_message: string | null;
+  graduation_year: string;
+  created_at: string;
+}
+
 export interface Memory {
   id: string;
   user_id: string;
