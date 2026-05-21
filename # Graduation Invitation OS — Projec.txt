@@ -438,8 +438,8 @@ Reason:
 
 /components
   PixelWindow.tsx
-  TerminalWindow.tsx
-  StudentStats.tsx
+  NotificationWindow.tsx
+  PlayerStats.tsx
   FriendsWindow.tsx
   MemoryGallery.tsx
   PixelCharacter.tsx

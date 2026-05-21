@@ -9,6 +9,7 @@ interface PixelWindowProps {
   x?: number;
   y?: number;
   titleBarColor?: string;
+  contentBg?: string;
 }
 
 export default function PixelWindow({
@@ -19,6 +20,7 @@ export default function PixelWindow({
   x = 0,
   y = 0,
   titleBarColor = "#0066CC",
+  contentBg = "#D4C5B0",
 }: PixelWindowProps) {
   const isAbsolute = x !== 0 || y !== 0;
 
@@ -96,7 +98,7 @@ export default function PixelWindow({
       </div>
 
       {/* Content */}
-      <div className="p-4 flex-1 overflow-auto" style={{ backgroundColor: "#D4C5B0" }}>
+      <div className="p-4 flex-1 overflow-auto" style={{ backgroundColor: contentBg }}>
         {children}
       </div>
     </motion.div>

@@ -17,8 +17,8 @@ The Graduation Invitation OS website has been successfully created with all core
 
 ### ✅ Components Created
 1. **PixelWindow.tsx** - Retro Windows 95 style windows
-2. **TerminalWindow.tsx** - Terminal simulation with typing animation
-3. **StudentStats.tsx** - RPG-style student statistics display
+2. **NotificationWindow.tsx** - Terminal simulation with typing animation
+3. **PlayerStats.tsx** - RPG-style player statistics display
 4. **MemoryGallery.tsx** - Photo carousel with navigation
 5. **CRTOverlay.tsx** - CRT scan line effects and vignette
 6. **FloatingParticles.tsx** - Falling particles animation
@@ -133,8 +133,8 @@ graduation-os/
 │   └── globals.css               # Global styles + Press Start 2P font
 ├── components/
 │   ├── PixelWindow.tsx           # Retro window component
-│   ├── TerminalWindow.tsx        # Terminal simulation
-│   ├── StudentStats.tsx          # Stats display
+│   ├── NotificationWindow.tsx        # Terminal simulation
+│   ├── PlayerStats.tsx          # Stats display
 │   ├── MemoryGallery.tsx         # Photo carousel
 │   ├── CRTOverlay.tsx            # Visual effects
 │   └── FloatingParticles.tsx     # Particle animation

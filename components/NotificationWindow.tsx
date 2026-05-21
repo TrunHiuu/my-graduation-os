@@ -1,18 +1,20 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 
-interface TerminalWindowProps {
+interface NotificationWindowProps {
   commands?: string[];
   title?: string;
   titleBarColor?: string;
 }
 
 const defaultCommands = [
-  "Hi there, all my adorable friends",
-  "You are invited to attend my graduation game",
-  "Complete all missions to gain the reward",
-  "Reward will be exchanged in my graduation ceromony",
-  "Let's go there to cheer up with me and receive your gift",
+  "Hi there, my adorable friends!",
+  "You are officially invited to join my Graduation Game — the final stage of my university journey.",
+  " ",
+  "Complete each mission to unlock special memories and reward",
+  "Reward will be redeemed at my Graduation Ceremony!",
+  " ", 
+  "Let’s celebrate this unforgettable ending together, cheer for one another, and create one last beautiful memory before the game officially ends.",
   " ",
   "     ---------------------------------------------------------------",
   "     Mission Information       ",
@@ -22,14 +24,14 @@ const defaultCommands = [
   "4th Round - Photographic Finale:           Coming soon (9/6/2026)",
   " ",
   "     ---------------------------------------------------------------",
-  "To start metric please CONFIRM your attendance in the Mission.exe window!",
+  "To begin your mission, please CONFIRM your attendance in the Mission.exe window!",
 ];
 
-export default function TerminalWindow({
+export default function NotificationWindow({
   commands,
   title = "Notification.exe",
   titleBarColor = "#00CC00",
-}: TerminalWindowProps) {
+}: NotificationWindowProps) {
   const [displayText, setDisplayText] = useState("");
   const [commandIndex, setCommandIndex] = useState(0);
 
@@ -40,7 +42,6 @@ export default function TerminalWindow({
   useEffect(() => {
     const cmds = commands || defaultCommands;
     
-    // Ngừng nếu đã hoàn thành tất cả commands
     if (commandIndex >= cmds.length) {
       return;
     }
@@ -66,10 +67,10 @@ export default function TerminalWindow({
           if (commandIndex < cmds.length - 1) {
             timeout = setTimeout(() => {
               setCommandIndex((prev) => prev + 1);
-            }, 400);
+            }, 300);
           }
         }
-      }, 30);
+      }, 25);
     };
 
     startTyping();

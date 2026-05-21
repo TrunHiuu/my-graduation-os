@@ -4,9 +4,10 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import PixelWindow from "@/components/PixelWindow";
-import TerminalWindow from "@/components/TerminalWindow";
-import StudentStatsWindow from "@/components/StudentStats";
+import MissionWindow from "@/components/MissionWindow";
+import NotificationWindow from "@/components/NotificationWindow";
+import DashboardWindow from "@/components/DashboardWindow";
+import PlayerWindow from "@/components/PlayerWindow";
 import CRTOverlay from "@/components/CRTOverlay";
 import FloatingParticles from "@/components/FloatingParticles";
 import MusicToggleButton from "@/components/MusicToggleButton";
@@ -20,6 +21,7 @@ export default function InvitePage() {
   const slug = params.slug as string;
 
   const [user, setUser] = useState<User | null>(null);
+  const [scores, setScores] = useState<Record<number, { score: number; completed: boolean; completed_at?: string | null }>>({});
   const [loading, setLoading] = useState(true);
   const [minimumLoadingDone, setMinimumLoadingDone] = useState(false);
 
@@ -128,64 +130,24 @@ export default function InvitePage() {
         <div className="grid h-[calc(100vh-140px)] w-full max-w-[1600px] grid-cols-4 gap-4">
           {/* Column 1: Notification (full height) */}
           <div className="col-span-1 h-full">
-            <TerminalWindow title="Notification.exe" titleBarColor="#000000" />
+            <NotificationWindow title="Notification.exe" titleBarColor="#000000" />
           </div>
 
           {/* Column 2-3: Mission (full height) */}
           <div className="col-span-2 h-full flex items-center justify-center">
-            <PixelWindow
-              title="Mission.exe"
-              width="100%"
-              height="100%"
-              titleBarColor="#0066CC"
-            >
-              <div className="space-y-3">
-                <div>
-                  <p style={{ fontFamily: "var(--font-roboto)" }} className="text-sm text-blue-900">
-                    Dear {user.nickname || user.name},
-                  </p>
-                </div>
-
-                <p style={{ fontFamily: "var(--font-roboto)", fontSize: "12px" }} className="text-xs">
-                  Welcome to the graduation mission window. Use the buttons below to confirm or decline attendance.
-                </p>
-
-                <div className="border-t-2 border-gray-800 pt-3">
-                  <p style={{ fontFamily: "var(--font-roboto)" }} className="text-xs font-bold">Nickname: {user.nickname || "N/A"}</p>
-                  <p style={{ fontFamily: "var(--font-roboto)" }} className="text-xs font-bold">Attendance: {user.attendance_status?.label || "Waiting"}</p>
-                  <p style={{ fontFamily: "var(--font-roboto)" }} className="text-xs font-bold">Event Location: TBA</p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-2">
-                  <button style={{ fontFamily: "var(--font-roboto)" }} className="w-full bg-red-500 border-2 border-gray-800 text-white text-xs font-bold py-2 hover:bg-red-600">
-                    Deny
-                  </button>
-                  <button style={{ fontFamily: "var(--font-roboto)" }} className="w-full bg-blue-500 border-2 border-gray-800 text-white text-xs font-bold py-2 hover:bg-blue-600">
-                    Confirm
-                  </button>
-                </div>
-              </div>
-            </PixelWindow>
+            <MissionWindow user={user} setUser={setUser} scores={scores} setScores={setScores} />
           </div>
 
           {/* Column 4: Stack DashBoard and Player - equal height, total height = other columns */}
           <div className="col-span-1 h-full flex flex-col gap-4">
             {/* Top: DashBoard */}
             <div className="flex-1">
-              <StudentStatsWindow
-                stats={studentStats}
-                title="DashBoard.exe"
-                titleBarColor="#FFA500"
-              />
+              <DashboardWindow stats={studentStats} />
             </div>
 
             {/* Bottom: Player */}
             <div className="flex-1">
-              <StudentStatsWindow
-                stats={studentStats}
-                title="Player.exe"
-                titleBarColor="#FF69B4"
-              />
+              <PlayerWindow stats={studentStats} user={user} scores={scores} />
             </div>
           </div>
         </div>

@@ -124,7 +124,7 @@ export default function Home() {
         >
           <div
             style={{
-              backgroundColor: "#c0c0c0",
+              backgroundColor: "#d3c2cc",
               border: "2px solid",
               borderColor: "#ffffff #303030 #303030 #ffffff",
               padding: "20px",
@@ -134,13 +134,13 @@ export default function Home() {
           >
             <div
               style={{
-                backgroundColor: "#d4669b",
+                backgroundColor: "#d96a9f",
                 border: "2px solid",
-                borderColor: "#f0a8d8 #6d2860 #6d2860 #f0a8d8",
+                borderColor: "#f7c1dd #7a2d59 #7a2d59 #f7c1dd",
                 padding: "12px",
                 textAlign: "center",
                 marginBottom: "15px",
-                boxShadow: "inset 1px 1px 0 #f0a8d8, inset -1px -1px 0 #000000"
+                boxShadow: "inset 1px 1px 0 #f7c1dd, inset -1px -1px 0 #000000"
               }}
             >
               <p
@@ -162,7 +162,7 @@ export default function Home() {
               style={{
                 fontFamily: "Arial, monospace",
                 fontSize: "13px",
-                color: "#000000",
+                color: "#1f1f1f",
                 textAlign: "center",
                 margin: "0 0 20px 0",
                 lineHeight: "1.5"
@@ -178,19 +178,19 @@ export default function Home() {
                 display: "flex",
                 justifyContent: "center",
                 padding: "2px",
-                backgroundColor: "#9abacc",
+                backgroundColor: "#cfa8bb",
                 border: "1px solid",
-                borderColor: "#d0e0f0 #404060 #404060 #d0e0f0",
-                boxShadow: "inset 1px 1px 0 #e0f0ff, inset -1px -1px 0 #303050"
+                borderColor: "#efd0de #6f3c58 #6f3c58 #efd0de",
+                boxShadow: "inset 1px 1px 0 #f7e2ea, inset -1px -1px 0 #6b4760"
               }}
             >
               <button
                 onMouseDown={handleWelcomeButtonMouseDown}
                 onMouseUp={handleWelcomeButtonMouseUp}
                 style={{
-                  backgroundColor: isWelcomeButtonPressed ? "#a83d6e" : "#d4669b",
+                  backgroundColor: isWelcomeButtonPressed ? "#b94f84" : "#d96a9f",
                   border: "2px solid",
-                  borderColor: isWelcomeButtonPressed ? "#6d2860 #f0a8d8 #f0a8d8 #6d2860" : "#f0a8d8 #6d2860 #6d2860 #f0a8d8",
+                  borderColor: isWelcomeButtonPressed ? "#7a2d59 #f7c1dd #f7c1dd #7a2d59" : "#f7c1dd #7a2d59 #7a2d59 #f7c1dd",
                   padding: "10px 30px",
                   fontFamily: "Arial Black, monospace",
                   fontSize: "13px",
@@ -202,8 +202,8 @@ export default function Home() {
                   textShadow: "1px 1px 0 #000000",
                   outline: "none",
                   boxShadow: isWelcomeButtonPressed 
-                    ? "inset -1px -1px 0 #f0a8d8, inset 1px 1px 0 #000000" 
-                    : "inset 1px 1px 0 #f0a8d8, inset -1px -1px 0 #000000",
+                    ? "inset -1px -1px 0 #f7c1dd, inset 1px 1px 0 #000000" 
+                    : "inset 1px 1px 0 #f7c1dd, inset -1px -1px 0 #000000",
                   transform: isWelcomeButtonPressed ? "scale(0.98)" : "scale(1)",
                   transition: "all 0.05s ease-out"
                 }}
